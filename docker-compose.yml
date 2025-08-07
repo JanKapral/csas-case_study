@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.9
+    container_name: case-study-db
+    environment:
+      POSTGRES_DB: case_study
+      POSTGRES_USER: orders
+      POSTGRES_PASSWORD: Passw0rd#1
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - case-study-network
+
+  app:
+    build: .
+    container_name: case-study-app
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - case-study-network
+
+volumes:
+  postgres_data:
+
+networks:
+  case-study-network:
+    driver: bridge
